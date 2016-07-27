@@ -18,11 +18,12 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.dannysuen.fivehundredpx.activity.BaseActivity;
 import me.dannysuen.fivehundredpx.model.Category;
 import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
 import me.dannysuen.fivehundredpx.util.recyclerview.ItemClickSupport;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     @BindView(R.id.category_list)
     RecyclerView mCategoriesRecyclerView;

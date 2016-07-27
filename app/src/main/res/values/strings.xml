@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">500px</string>
+
+    <string name="fetch_photos_failed">Fetching photos fails!</string>
 </resources>

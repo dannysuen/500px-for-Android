@@ -10,11 +10,13 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Toast;
 
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import me.dannysuen.fivehundredpx.activity.BaseActivity;
 import me.dannysuen.fivehundredpx.api.PhotosApiService;
 import me.dannysuen.fivehundredpx.model.Category;
 import me.dannysuen.fivehundredpx.model.PhotosResponse;
@@ -27,7 +29,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class PhotosActivity extends AppCompatActivity {
+public class PhotosActivity extends BaseActivity {
 
     private static final int INVALID_PAGE = -1;
 
@@ -121,25 +123,33 @@ public class PhotosActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+
+
+    }
+
     private void fetchPhotosList() {
         mNextPage = 1;
 
-        Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, mNextPage);
+        Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, mNextPage,
+                Photo.DEFAULT_IMAGE_SIZE_ID);
         call.enqueue(new Callback<PhotosResponse>() {
             @Override
             public void onResponse(Call<PhotosResponse> call, Response<PhotosResponse> response) {
                 if (response.isSuccessful()) {
                     PhotosResponse envelop = response.body();
 
-//                    mNextPage = envelop.pagination.nextUrl == null ? INVALID_PAGE : mNextPage + 1;
+                    mNextPage = !envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
 
                     // Create adapter passing in the sample user data
                     mAdapter = new PhotosAdapter(PhotosActivity.this, envelop.photos);
                     // Attach the adapter to the recyclerview to populate items
                     mPhotosRecyclerView.setAdapter(mAdapter);
                 } else {
-//                    Toast.makeText(PhotosActivity.this, R.string.fetch_users_failed, Toast.LENGTH_SHORT)
-//                            .show();
+                    Toast.makeText(PhotosActivity.this, R.string.fetch_photos_failed, Toast.LENGTH_SHORT)
+                            .show();
                 }
 
                 mRefreshLayout.setRefreshing(false);
@@ -154,7 +164,8 @@ public class PhotosActivity extends AppCompatActivity {
 
     private void loadNextPage(int page) {
         if (page != INVALID_PAGE) {
-            Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, page);
+            Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, page,
+                    Photo.DEFAULT_IMAGE_SIZE_ID);
             call.enqueue(new Callback<PhotosResponse>() {
                 @Override
                 public void onResponse(Call<PhotosResponse> call, Response<PhotosResponse>
@@ -165,7 +176,7 @@ public class PhotosActivity extends AppCompatActivity {
                         mAdapter.addAll(envelop.photos);
 //                        mAdapter.notifyItemRangeInserted(size, envelop.photos.size());
 
-                        mNextPage = envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
+                        mNextPage = !envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
                     }
                 }
 

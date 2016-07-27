@@ -12,6 +12,7 @@ public interface PhotosApiService {
 
     @GET("photos")
     Call<PhotosResponse> fetchPhotos(@Query("consumer_key") String consumerKey, @Query("only") String only, @Query
-            ("page") int page);
+            ("page") int page, @Query("image_size") int imageSizeId);
+
 
 }
