@@ -14,16 +14,17 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import me.dannysuen.fivehundredpx.model.Photo;
+import me.dannysuen.fivehundredpx.model.Category;
+
 
 /**
  * Created by danny on 16-7-26.
  */
-public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder> {
+public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.thumbnail_image)
-        ImageView thumbnailImage;
+        @BindView(R.id.cover_image)
+        ImageView coverImage;
 
         @BindView(R.id.name_text)
         TextView nameText;
@@ -34,27 +35,27 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         }
     }
 
-    private List<Photo> mPhotos;
+    private List<Category> mCategories;
     private Context mContext;
 
-    public PhotosAdapter(Context context, List<Photo> photos) {
+    public CategoriesAdapter(Context context, List<Category> categories) {
         mContext = context;
-        mPhotos = photos;
+        mCategories = categories;
     }
 
-    public void addAll(List<Photo> photos) {
+    public void addAll(List<Category> categories) {
         int size = getItemCount();
-        mPhotos.addAll(photos);
+        mCategories.addAll(categories);
         notifyItemRangeInserted(size, getItemCount());
     }
 
     public void clear() {
-        mPhotos.clear();
+        mCategories.clear();
         notifyDataSetChanged();
     }
 
-    public List<Photo> getPhotos() {
-        return mPhotos;
+    public List<Category> getCategories() {
+        return mCategories;
     }
 
     @Override
@@ -63,7 +64,7 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         LayoutInflater inflater = LayoutInflater.from(context);
 
         // Inflate the custom layout
-        View contactView = inflater.inflate(R.layout.list_item_photo, parent, false);
+        View contactView = inflater.inflate(R.layout.list_item_category, parent, false);
 
         // Return a new holder instance
         ViewHolder viewHolder = new ViewHolder(contactView);
@@ -72,16 +73,16 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(ViewHolder holder, int position) {
-        Photo photo = mPhotos.get(position);
+        Category category = mCategories.get(position);
 
-        Picasso.with(mContext).load(photo.imageUrl).into(holder.thumbnailImage);
+        Picasso.with(mContext).load(category.coverImageUrl).into(holder.coverImage);
 
-        holder.nameText.setText(photo.name);
+        holder.nameText.setText(category.name);
     }
 
     @Override
     public int getItemCount() {
-        return mPhotos.size();
+        return mCategories.size();
     }
 
 

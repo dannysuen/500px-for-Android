@@ -1,24 +1,62 @@
 package me.dannysuen.fivehundredpx;
 
+import org.parceler.Parcels;
+
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.GridLayoutManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.view.View;
 
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import me.dannysuen.fivehundredpx.model.Category;
 
 public class MainActivity extends AppCompatActivity {
+
+    @BindView(R.id.category_list)
+    RecyclerView mCategoriesRecyclerView;
+
+    CategoriesAdapter mAdapter;
+    List<Category> mCategories;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
+
+        mCategories = Category.getDefaultCategories();
+
+        setupRecyclerView();
     }
 
-    @OnClick(R.id.animals_btn)
-    public void onAnimalsButtonClick() {
-        Intent intent = new Intent(this, PhotosActivity.class);
-        startActivity(intent);
+    private void setupRecyclerView() {
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mCategoriesRecyclerView.setLayoutManager(linearLayoutManager);
+        mCategoriesRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
+
+        ItemClickSupport.addTo(mCategoriesRecyclerView).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        Category category = mCategories.get(position);
+
+                        Intent intent = new Intent(MainActivity.this, PhotosActivity.class);
+                        intent.putExtra(Category.class.getCanonicalName(), Parcels.wrap(category));
+                        startActivity(intent);
+                    }
+                }
+        );
+
+        mAdapter = new CategoriesAdapter(this, mCategories);
+        // Attach the adapter to the recyclerview to populate items
+        mCategoriesRecyclerView.setAdapter(mAdapter);
     }
 }

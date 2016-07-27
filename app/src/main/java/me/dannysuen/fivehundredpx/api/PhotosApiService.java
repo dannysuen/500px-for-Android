@@ -11,6 +11,7 @@ import retrofit2.http.Query;
 public interface PhotosApiService {
 
     @GET("photos")
-    Call<Envelop> fetchPhotos(@Query("consumer_key") String consumerKey, @Query("only") String only);
+    Call<Envelop> fetchPhotos(@Query("consumer_key") String consumerKey, @Query("only") String only, @Query
+            ("page") int page);
 
 }
