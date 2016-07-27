@@ -6,10 +6,10 @@ import com.google.gson.reflect.TypeToken;
 import org.parceler.Parcels;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.view.View;
 
 import java.io.IOException;
@@ -39,12 +39,15 @@ public class MainActivity extends BaseActivity {
 
         Gson gson = ((FiveHundredPxApplication) getApplication()).getGson();
         // Load selected categories from a local json file in assets
-        mCategories = gson.fromJson(loadJSONFromAsset(), new TypeToken<List<Category>>() {}.getType());
 
-        setupRecyclerView();
+        String categoriesString = loadCategoriesJsonStringFromAssets();
+        if (!TextUtils.isEmpty(categoriesString)) {
+            mCategories = gson.fromJson(categoriesString, new TypeToken<List<Category>>() {}.getType());
+            setupCategoriesRecyclerView();
+        }
     }
 
-    public String loadJSONFromAsset() {
+    public String loadCategoriesJsonStringFromAssets() {
         String json = null;
         try {
             InputStream is = getAssets().open("selected_categories.json");
@@ -62,7 +65,7 @@ public class MainActivity extends BaseActivity {
 
     }
 
-    private void setupRecyclerView() {
+    private void setupCategoriesRecyclerView() {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         mCategoriesRecyclerView.setLayoutManager(linearLayoutManager);
         mCategoriesRecyclerView.addItemDecoration(new DividerItemDecoration(this,
