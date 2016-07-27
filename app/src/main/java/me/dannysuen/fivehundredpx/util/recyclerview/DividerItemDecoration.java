@@ -1,4 +1,4 @@
-package me.dannysuen.fivehundredpx;
+package me.dannysuen.fivehundredpx.util.recyclerview;
 
 /**
  * Created by danny on 16-7-26.

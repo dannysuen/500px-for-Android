@@ -1,7 +1,9 @@
-package me.dannysuen.fivehundredpx;
+package me.dannysuen.fivehundredpx.util.recyclerview;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+
+import me.dannysuen.fivehundredpx.R;
 
 /*
   Source: http://www.littlerobots.nl/blog/Handle-Android-RecyclerView-Clicks/

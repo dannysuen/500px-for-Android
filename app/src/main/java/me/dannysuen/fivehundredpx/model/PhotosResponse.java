@@ -7,7 +7,7 @@ import java.util.List;
 /**
  * Created by danny on 16-7-26.
  */
-public class Envelop {
+public class PhotosResponse {
 
     @SerializedName("current_page")
     public int currentPage;
@@ -20,4 +20,8 @@ public class Envelop {
 
     @SerializedName("photos")
     public List<Photo> photos;
+
+    public boolean hasNextPage() {
+        return currentPage < totalPages;
+    }
 }

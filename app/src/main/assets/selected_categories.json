@@ -93,5 +93,83 @@
     "id": 8,
     "name": "Landscapes",
     "cover_image_url": null
+  },
+
+  {
+    "id": 12,
+    "name": "Macro",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 18,
+    "name": "Nature",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 4,
+    "name": "Nude",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 7,
+    "name": "People",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 19,
+    "name": "Performing Arts",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 17,
+    "name": "Sport",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 6,
+    "name": "Still Life",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 21,
+    "name": "Street",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 26,
+    "name": "Transportation",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 13,
+    "name": "Travel",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 22,
+    "name": "Underwater",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 27,
+    "name": "Urban Exploration",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 25,
+    "name": "Wedding",
+    "cover_image_url": null
   }
 ]

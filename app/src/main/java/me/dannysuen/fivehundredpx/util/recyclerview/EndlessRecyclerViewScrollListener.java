@@ -1,4 +1,4 @@
-package me.dannysuen.fivehundredpx;
+package me.dannysuen.fivehundredpx.util.recyclerview;
 
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;

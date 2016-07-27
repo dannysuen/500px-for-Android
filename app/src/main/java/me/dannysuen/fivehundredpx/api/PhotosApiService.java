@@ -1,6 +1,6 @@
 package me.dannysuen.fivehundredpx.api;
 
-import me.dannysuen.fivehundredpx.model.Envelop;
+import me.dannysuen.fivehundredpx.model.PhotosResponse;
 import retrofit2.Call;
 import retrofit2.http.GET;
 import retrofit2.http.Query;
@@ -11,7 +11,7 @@ import retrofit2.http.Query;
 public interface PhotosApiService {
 
     @GET("photos")
-    Call<Envelop> fetchPhotos(@Query("consumer_key") String consumerKey, @Query("only") String only, @Query
+    Call<PhotosResponse> fetchPhotos(@Query("consumer_key") String consumerKey, @Query("only") String only, @Query
             ("page") int page);
 
 }

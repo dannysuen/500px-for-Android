@@ -10,7 +10,6 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Toast;
 
 import java.util.List;
 
@@ -18,8 +17,11 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.dannysuen.fivehundredpx.api.PhotosApiService;
 import me.dannysuen.fivehundredpx.model.Category;
-import me.dannysuen.fivehundredpx.model.Envelop;
+import me.dannysuen.fivehundredpx.model.PhotosResponse;
 import me.dannysuen.fivehundredpx.model.Photo;
+import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
+import me.dannysuen.fivehundredpx.util.recyclerview.EndlessRecyclerViewScrollListener;
+import me.dannysuen.fivehundredpx.util.recyclerview.ItemClickSupport;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -33,7 +35,8 @@ public class PhotosActivity extends AppCompatActivity {
     SwipeRefreshLayout mRefreshLayout;
 
     @BindView(R.id.users_list)
-    RecyclerView mUsersRecyclerView;
+    RecyclerView mPhotosRecyclerView;
+
     private Retrofit mRetrofit;
 
     private PhotosApiService mService;
@@ -58,33 +61,7 @@ public class PhotosActivity extends AppCompatActivity {
         mRetrofit = ((FiveHundredPxApplication) getApplication()).getRetrofit();
         mService = mRetrofit.create(PhotosApiService.class);
 
-        // Set layout manager to position the items
-        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mUsersRecyclerView.setLayoutManager(linearLayoutManager);
-        mUsersRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST));
-
-        mUsersRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
-            @Override
-            public void onLoadMore(int page, int totalItemsCount) {
-                // Triggered only when new data needs to be appended to the list
-                // Add whatever code is needed to append new items to the bottom of the list
-//                loadMoreFromApi(mNextPage);
-            }
-        });
-        ItemClickSupport.addTo(mUsersRecyclerView).setOnItemClickListener(
-                new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        List<Photo> photos = ((PhotosAdapter) recyclerView.getAdapter()).getPhotos();
-                        Photo photo = photos.get(position);
-
-                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
-                        intent.putExtra(Photo.class.getCanonicalName(), Parcels.wrap(photo));
-                        startActivity(intent);
-                    }
-                }
-        );
+        setupPhotosRecyclerView();
 
         // It needs to be put into MessageQueue in order to animate the control
         mRefreshLayout.post(new Runnable() {
@@ -104,6 +81,36 @@ public class PhotosActivity extends AppCompatActivity {
         });
     }
 
+    private void setupPhotosRecyclerView() {
+        // Set layout manager to position the items
+        final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        mPhotosRecyclerView.setLayoutManager(linearLayoutManager);
+        mPhotosRecyclerView.addItemDecoration(new DividerItemDecoration(this,
+                DividerItemDecoration.VERTICAL_LIST));
+
+        mPhotosRecyclerView.addOnScrollListener(new EndlessRecyclerViewScrollListener(linearLayoutManager) {
+            @Override
+            public void onLoadMore(int page, int totalItemsCount) {
+                // Triggered only when new data needs to be appended to the list
+                // Add whatever code is needed to append new items to the bottom of the list
+                loadNextPage(mNextPage);
+            }
+        });
+        ItemClickSupport.addTo(mPhotosRecyclerView).setOnItemClickListener(
+                new ItemClickSupport.OnItemClickListener() {
+                    @Override
+                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
+                        List<Photo> photos = ((PhotosAdapter) recyclerView.getAdapter()).getPhotos();
+                        Photo photo = photos.get(position);
+
+                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
+                        intent.putExtra(Photo.class.getCanonicalName(), Parcels.wrap(photo));
+                        startActivity(intent);
+                    }
+                }
+        );
+    }
+
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == android.R.id.home) {
@@ -117,19 +124,19 @@ public class PhotosActivity extends AppCompatActivity {
     private void fetchPhotosList() {
         mNextPage = 1;
 
-        Call<Envelop> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, mNextPage);
-        call.enqueue(new Callback<Envelop>() {
+        Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, mNextPage);
+        call.enqueue(new Callback<PhotosResponse>() {
             @Override
-            public void onResponse(Call<Envelop> call, Response<Envelop> response) {
+            public void onResponse(Call<PhotosResponse> call, Response<PhotosResponse> response) {
                 if (response.isSuccessful()) {
-                    Envelop envelop = response.body();
+                    PhotosResponse envelop = response.body();
 
 //                    mNextPage = envelop.pagination.nextUrl == null ? INVALID_PAGE : mNextPage + 1;
 
                     // Create adapter passing in the sample user data
                     mAdapter = new PhotosAdapter(PhotosActivity.this, envelop.photos);
                     // Attach the adapter to the recyclerview to populate items
-                    mUsersRecyclerView.setAdapter(mAdapter);
+                    mPhotosRecyclerView.setAdapter(mAdapter);
                 } else {
 //                    Toast.makeText(PhotosActivity.this, R.string.fetch_users_failed, Toast.LENGTH_SHORT)
 //                            .show();
@@ -139,9 +146,36 @@ public class PhotosActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onFailure(Call<Envelop> call, Throwable t) {
+            public void onFailure(Call<PhotosResponse> call, Throwable t) {
                 mRefreshLayout.setRefreshing(false);
             }
         });
+    }
+
+    private void loadNextPage(int page) {
+        if (page != INVALID_PAGE) {
+            Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, page);
+            call.enqueue(new Callback<PhotosResponse>() {
+                @Override
+                public void onResponse(Call<PhotosResponse> call, Response<PhotosResponse>
+                        response) {
+                    if (response.isSuccessful()) {
+                        PhotosResponse envelop = response.body();
+                        int size = mAdapter.getItemCount();
+                        mAdapter.addAll(envelop.photos);
+//                        mAdapter.notifyItemRangeInserted(size, envelop.photos.size());
+
+                        mNextPage = envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
+                    }
+                }
+
+                @Override
+                public void onFailure(Call<PhotosResponse> call, Throwable t) {
+
+                }
+            });
+        } else {
+
+        }
     }
 }
