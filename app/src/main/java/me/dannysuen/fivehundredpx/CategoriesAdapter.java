@@ -23,8 +23,8 @@ import me.dannysuen.fivehundredpx.model.Category;
 public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.ViewHolder> {
     public static class ViewHolder extends RecyclerView.ViewHolder {
 
-        @BindView(R.id.cover_image)
-        ImageView coverImage;
+//        @BindView(R.id.cover_image)
+//        ImageView coverImage;
 
         @BindView(R.id.name_text)
         TextView nameText;
@@ -75,7 +75,7 @@ public class CategoriesAdapter extends RecyclerView.Adapter<CategoriesAdapter.Vi
     public void onBindViewHolder(ViewHolder holder, int position) {
         Category category = mCategories.get(position);
 
-        Picasso.with(mContext).load(category.coverImageUrl).into(holder.coverImage);
+//        Picasso.with(mContext).load(category.coverImageUrl).into(holder.coverImage);
 
         holder.nameText.setText(category.name);
     }

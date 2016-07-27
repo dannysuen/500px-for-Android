@@ -1,5 +1,8 @@
 package me.dannysuen.fivehundredpx;
 
+import com.google.gson.Gson;
+import com.google.gson.reflect.TypeToken;
+
 import org.parceler.Parcels;
 
 import android.content.Intent;
@@ -10,6 +13,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import butterknife.BindView;
@@ -31,9 +36,29 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        mCategories = Category.getDefaultCategories();
+        Gson gson = ((FiveHundredPxApplication) getApplication()).getGson();
+        // Load selected categories from a local json file in assets
+        mCategories = gson.fromJson(loadJSONFromAsset(), new TypeToken<List<Category>>() {}.getType());
 
         setupRecyclerView();
+    }
+
+    public String loadJSONFromAsset() {
+        String json = null;
+        try {
+            InputStream is = getAssets().open("selected_categories.json");
+            int size = is.available();
+            byte[] buffer = new byte[size];
+            is.read(buffer);
+            is.close();
+
+            json = new String(buffer, "UTF-8");
+        } catch (IOException ex) {
+            ex.printStackTrace();
+            return null;
+        }
+        return json;
+
     }
 
     private void setupRecyclerView() {

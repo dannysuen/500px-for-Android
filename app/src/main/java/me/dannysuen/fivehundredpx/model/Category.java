@@ -1,5 +1,7 @@
 package me.dannysuen.fivehundredpx.model;
 
+import com.google.gson.annotations.SerializedName;
+
 import org.parceler.Parcel;
 import org.parceler.ParcelConstructor;
 
@@ -25,8 +27,13 @@ public class Category extends Model {
     public String name;
 
     // Selected cover image url
+    @SerializedName("cover_image_url")
     public String coverImageUrl;
 
+    /**
+     * Get a list of predefined categories, each has id, name and an image url for showcase
+     * @return
+     */
     public static List<Category> getDefaultCategories() {
         List<Category> result = new ArrayList<>();
         Category category;

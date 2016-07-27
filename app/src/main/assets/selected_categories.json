@@ -1,0 +1,97 @@
+[
+  {
+    "id": 0,
+    "name": "Uncategorized",
+    "cover_image_url": "https://drscdn.500px.org/photo/164917263/q%3D50_w%3D140_h%3D140/b952b24e7cf52284d3ee672928355d8a?v=2"
+  },
+
+  {
+    "id": 10,
+    "name": "Abstract",
+    "cover_image_url": "https://drscdn.500px.org/photo/164894239/q%3D50_w%3D140_h%3D140/e7e4c4a40ce16de8adbf95be1ce251b4?v=3"
+  },
+
+  {
+    "id": 11,
+    "name": "Animals",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 5,
+    "name": "Black and White",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 1,
+    "name": "Celebrities",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 9,
+    "name": "City and Architecture",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 15,
+    "name": "Commercial",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 16,
+    "name": "Concert",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 20,
+    "name": "Family",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 14,
+    "name": "Fashion",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 2,
+    "name": "Film",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 24,
+    "name": "Fine Art",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 23,
+    "name": "Food",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 3,
+    "name": "Journalism",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 3,
+    "name": "Journalism",
+    "cover_image_url": null
+  },
+
+  {
+    "id": 8,
+    "name": "Landscapes",
+    "cover_image_url": null
+  }
+]

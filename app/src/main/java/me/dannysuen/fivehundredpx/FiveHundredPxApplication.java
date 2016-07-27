@@ -20,6 +20,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class FiveHundredPxApplication extends Application {
 
     private Retrofit mRetrofitSingleton;
+    private Gson mGson;
 
     @Override
     public void onCreate() {
@@ -27,7 +28,7 @@ public class FiveHundredPxApplication extends Application {
 
         Stetho.initializeWithDefaults(this);
 
-        Gson gson = new GsonBuilder()
+        mGson = new GsonBuilder()
                 .setDateFormat("yyyy-MM-dd'T'HH:mm:ssZ")
                 .create();
 
@@ -37,7 +38,7 @@ public class FiveHundredPxApplication extends Application {
         mRetrofitSingleton = new Retrofit.Builder()
                 .baseUrl(ApiRoot.BASE_URL)
                 .callFactory(client)
-                .addConverterFactory(GsonConverterFactory.create(gson))
+                .addConverterFactory(GsonConverterFactory.create(mGson))
                 .build();
 
         initPicasso(client);
@@ -50,5 +51,9 @@ public class FiveHundredPxApplication extends Application {
 
     public Retrofit getRetrofit() {
         return mRetrofitSingleton;
+    }
+
+    public Gson getGson() {
+        return mGson;
     }
 }
