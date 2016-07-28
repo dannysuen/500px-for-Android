@@ -20,6 +20,7 @@ import me.dannysuen.fivehundredpx.api.PhotosApiService;
 import me.dannysuen.fivehundredpx.model.Category;
 import me.dannysuen.fivehundredpx.model.PhotosResponse;
 import me.dannysuen.fivehundredpx.model.Photo;
+import me.dannysuen.fivehundredpx.util.Constants;
 import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
 import me.dannysuen.fivehundredpx.util.recyclerview.EndlessRecyclerViewScrollListener;
 import me.dannysuen.fivehundredpx.util.recyclerview.ItemClickSupport;
@@ -29,8 +30,6 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 
 public class PhotosPreviewActivity extends BaseActivity {
-
-    private static final int INVALID_PAGE = -1;
 
     @BindView(R.id.swipe_refresh_layout)
     SwipeRefreshLayout mRefreshLayout;
@@ -140,7 +139,7 @@ public class PhotosPreviewActivity extends BaseActivity {
                 if (response.isSuccessful()) {
                     PhotosResponse envelop = response.body();
 
-                    mNextPage = !envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
+                    mNextPage = envelop.hasNextPage() ? mNextPage + 1 : PhotosResponse.INVALID_PAGE;
 
                     // Create adapter passing in the sample user data
                     mAdapter = new PhotosAdapter(PhotosPreviewActivity.this, envelop.photos);
@@ -162,7 +161,7 @@ public class PhotosPreviewActivity extends BaseActivity {
     }
 
     private void loadNextPage(int page) {
-        if (page != INVALID_PAGE) {
+        if (page != PhotosResponse.INVALID_PAGE) {
             Call<PhotosResponse> call = mService.fetchPhotos(Constants.CONSUMER_KEY, mCategory.name, page,
                     Photo.DEFAULT_IMAGE_SIZE_ID);
             call.enqueue(new Callback<PhotosResponse>() {
@@ -175,7 +174,7 @@ public class PhotosPreviewActivity extends BaseActivity {
                         mAdapter.addAll(envelop.photos);
 //                        mAdapter.notifyItemRangeInserted(size, envelop.photos.size());
 
-                        mNextPage = !envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
+                        mNextPage = envelop.hasNextPage() ? mNextPage + 1 : PhotosResponse.INVALID_PAGE;
                     }
                 }
 

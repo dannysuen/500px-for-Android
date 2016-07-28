@@ -8,6 +8,10 @@ import java.util.List;
  * Created by danny on 16-7-26.
  */
 public class PhotosResponse {
+    /**
+     * An page constant for invalid page
+     */
+    public static final int INVALID_PAGE = -1;
 
     @SerializedName("current_page")
     public int currentPage;

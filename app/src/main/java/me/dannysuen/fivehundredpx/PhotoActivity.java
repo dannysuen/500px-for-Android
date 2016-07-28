@@ -40,7 +40,8 @@ public class PhotoActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         mPhoto = Parcels.unwrap(getIntent().getParcelableExtra(Photo.class.getCanonicalName()));
-        setTitle(mPhoto.name);
+        getSupportActionBar().setTitle(mPhoto.name);
+        getSupportActionBar().setSubtitle(mPhoto.user.fullName);
 
         Picasso.with(this).load(mPhoto.imageUrl).into(new Target() {
             @Override

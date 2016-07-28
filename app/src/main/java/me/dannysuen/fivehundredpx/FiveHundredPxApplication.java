@@ -12,6 +12,7 @@ import android.app.Application;
 
 import java.io.File;
 
+import me.dannysuen.fivehundredpx.api.ApiRoot;
 import okhttp3.Cache;
 import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
@@ -55,8 +56,8 @@ public class FiveHundredPxApplication extends Application {
     // Makes OkHttpClient as the default downloader for Picasso.
     private void initPicasso(OkHttpClient client) {
         Picasso picasso = new Picasso.Builder(this).downloader(new OkHttp3Downloader(client)).build();
-        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
-        picasso.setLoggingEnabled(BuildConfig.DEBUG);
+//        picasso.setIndicatorsEnabled(BuildConfig.DEBUG);
+//        picasso.setLoggingEnabled(BuildConfig.DEBUG);
         Picasso.setSingletonInstance(picasso);
     }
 

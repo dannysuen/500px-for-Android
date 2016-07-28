@@ -1,4 +1,4 @@
-package me.dannysuen.fivehundredpx;
+package me.dannysuen.fivehundredpx.api;
 
 /**
  * Created by danny on 16-7-26.
