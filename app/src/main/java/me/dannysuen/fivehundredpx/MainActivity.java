@@ -37,17 +37,28 @@ public class MainActivity extends BaseActivity {
         setContentView(R.layout.activity_main);
         ButterKnife.bind(this);
 
-        Gson gson = ((FiveHundredPxApplication) getApplication()).getGson();
-        // Load selected categories from a local json file in assets
+        final Gson gson = ((FiveHundredPxApplication) getApplication()).getGson();
 
-        String categoriesString = loadCategoriesJsonStringFromAssets();
-        if (!TextUtils.isEmpty(categoriesString)) {
-            mCategories = gson.fromJson(categoriesString, new TypeToken<List<Category>>() {}.getType());
-            setupCategoriesRecyclerView();
-        }
+        new Thread() {
+            @Override
+            public void run() {
+                String categoriesString = loadCategoriesJsonStringFromAssets();
+                if (!TextUtils.isEmpty(categoriesString)) {
+                    mCategories = gson.fromJson(categoriesString, new TypeToken<List<Category>>() {}.getType());
+
+                    MainActivity.this.runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            setupCategoriesRecyclerView();
+                        }
+                    });
+                }
+            }
+        }.start();
     }
 
-    public String loadCategoriesJsonStringFromAssets() {
+    // Load selected categories from a local json file in assets
+    private String loadCategoriesJsonStringFromAssets() {
         String json = null;
         try {
             InputStream is = getAssets().open("selected_categories.json");
