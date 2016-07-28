@@ -1,3 +1,3 @@
-# 500px-for-Android
+# 500px for Android
 
-Nothing here.
+This repo hosts the source code of an assignment issued by Lazada. 
