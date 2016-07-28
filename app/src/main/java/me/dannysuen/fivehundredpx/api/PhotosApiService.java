@@ -10,9 +10,13 @@ import retrofit2.http.Query;
  */
 public interface PhotosApiService {
 
+    // Example link: https://api.500px.com/v1/photos?consumer_key=ptfVekoqagi9wzs7ukGxXDcYOq65D3YPN6AIKwv5
+    // &only=nature
     @GET("photos")
-    Call<PhotosResponse> fetchPhotos(@Query("consumer_key") String consumerKey, @Query("only") String only, @Query
-            ("page") int page, @Query("image_size") int imageSizeId);
+    Call<PhotosResponse> fetchPhotos(@Query("consumer_key") String consumerKey,
+                                     @Query("only") String only,
+                                     @Query("page") int page,
+                                     @Query("image_size") int imageSizeId);
 
 
 }
