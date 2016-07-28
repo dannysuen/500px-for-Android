@@ -4,7 +4,6 @@ import org.parceler.Parcels;
 
 import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -29,7 +28,7 @@ import retrofit2.Callback;
 import retrofit2.Response;
 import retrofit2.Retrofit;
 
-public class PhotosActivity extends BaseActivity {
+public class PhotosPreviewActivity extends BaseActivity {
 
     private static final int INVALID_PAGE = -1;
 
@@ -52,7 +51,7 @@ public class PhotosActivity extends BaseActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_photos);
+        setContentView(R.layout.activity_photos_preview);
         ButterKnife.bind(this);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
@@ -105,7 +104,7 @@ public class PhotosActivity extends BaseActivity {
                         List<Photo> photos = ((PhotosAdapter) recyclerView.getAdapter()).getPhotos();
                         Photo photo = photos.get(position);
 
-                        Intent intent = new Intent(PhotosActivity.this, PhotoActivity.class);
+                        Intent intent = new Intent(PhotosPreviewActivity.this, PhotoActivity.class);
                         intent.putExtra(Photo.class.getCanonicalName(), Parcels.wrap(photo));
                         startActivity(intent);
                     }
@@ -144,11 +143,11 @@ public class PhotosActivity extends BaseActivity {
                     mNextPage = !envelop.hasNextPage() ? INVALID_PAGE : mNextPage + 1;
 
                     // Create adapter passing in the sample user data
-                    mAdapter = new PhotosAdapter(PhotosActivity.this, envelop.photos);
+                    mAdapter = new PhotosAdapter(PhotosPreviewActivity.this, envelop.photos);
                     // Attach the adapter to the recyclerview to populate items
                     mPhotosRecyclerView.setAdapter(mAdapter);
                 } else {
-                    Toast.makeText(PhotosActivity.this, R.string.fetch_photos_failed, Toast.LENGTH_SHORT)
+                    Toast.makeText(PhotosPreviewActivity.this, R.string.fetch_photos_failed, Toast.LENGTH_SHORT)
                             .show();
                 }
 

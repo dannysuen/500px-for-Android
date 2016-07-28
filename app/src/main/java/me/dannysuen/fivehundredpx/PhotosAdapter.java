@@ -25,7 +25,10 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
         @BindView(R.id.thumbnail_image)
         ImageView thumbnailImage;
 
-        @BindView(R.id.name_text)
+        @BindView(R.id.title_text)
+        TextView titleText;
+
+        @BindView(R.id.author_text)
         TextView nameText;
 
         public ViewHolder(View itemView) {
@@ -76,7 +79,8 @@ public class PhotosAdapter extends RecyclerView.Adapter<PhotosAdapter.ViewHolder
 
         Picasso.with(mContext).load(photo.imageUrl).into(holder.thumbnailImage);
 
-        holder.nameText.setText(photo.name);
+        holder.titleText.setText(photo.name);
+        holder.nameText.setText(photo.user.fullName);
     }
 
     @Override

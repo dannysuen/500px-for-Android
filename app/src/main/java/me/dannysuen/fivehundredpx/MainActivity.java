@@ -77,7 +77,7 @@ public class MainActivity extends BaseActivity {
                     public void onItemClicked(RecyclerView recyclerView, int position, View v) {
                         Category category = mCategories.get(position);
 
-                        Intent intent = new Intent(MainActivity.this, PhotosActivity.class);
+                        Intent intent = new Intent(MainActivity.this, PhotosPreviewActivity.class);
                         intent.putExtra(Category.class.getCanonicalName(), Parcels.wrap(category));
                         startActivity(intent);
                     }

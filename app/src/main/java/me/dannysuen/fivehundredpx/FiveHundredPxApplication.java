@@ -51,6 +51,8 @@ public class FiveHundredPxApplication extends Application {
                 .build();
     }
 
+
+    // Makes OkHttpClient as the default downloader for Picasso.
     private void initPicasso(OkHttpClient client) {
         Picasso picasso = new Picasso.Builder(this).downloader(new OkHttp3Downloader(client)).build();
         picasso.setIndicatorsEnabled(BuildConfig.DEBUG);

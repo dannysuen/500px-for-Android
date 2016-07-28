@@ -18,4 +18,6 @@ public class Photo extends Model {
     @SerializedName("image_url")
     public String imageUrl;
 
+    @SerializedName("user")
+    public User user;
 }
