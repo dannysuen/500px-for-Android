@@ -1,15 +1,15 @@
 package me.dannysuen.fivehundredpx;
 
-import org.parceler.Parcels;
-
 import android.content.Intent;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.os.Bundle;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
+
+import org.parceler.Parcels;
 
 import java.util.List;
 
@@ -18,8 +18,8 @@ import butterknife.ButterKnife;
 import me.dannysuen.fivehundredpx.activity.BaseActivity;
 import me.dannysuen.fivehundredpx.api.PhotosApiService;
 import me.dannysuen.fivehundredpx.model.Category;
-import me.dannysuen.fivehundredpx.model.PhotosResponse;
 import me.dannysuen.fivehundredpx.model.Photo;
+import me.dannysuen.fivehundredpx.model.PhotosResponse;
 import me.dannysuen.fivehundredpx.util.Constants;
 import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
 import me.dannysuen.fivehundredpx.util.recyclerview.EndlessRecyclerViewScrollListener;
@@ -172,7 +172,7 @@ public class PhotosPreviewActivity extends BaseActivity {
                         PhotosResponse envelop = response.body();
                         int size = mAdapter.getItemCount();
                         mAdapter.addAll(envelop.photos);
-//                        mAdapter.notifyItemRangeInserted(size, envelop.photos.size());
+//                        categoriesAdapter.notifyItemRangeInserted(size, envelop.photos.size());
 
                         mNextPage = envelop.hasNextPage() ? mNextPage + 1 : PhotosResponse.INVALID_PAGE;
                     }
