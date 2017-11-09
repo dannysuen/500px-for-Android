@@ -10,19 +10,17 @@ import com.google.gson.reflect.TypeToken;
 
 import org.parceler.Parcels;
 
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.dannysuen.fivehundredpx.activity.BaseActivity;
 import me.dannysuen.fivehundredpx.model.Category;
+import me.dannysuen.fivehundredpx.util.AssetsUtils;
 import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
 import me.dannysuen.fivehundredpx.util.recyclerview.ItemClickSupport;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
 public class MainActivity extends BaseActivity {
@@ -43,35 +41,12 @@ public class MainActivity extends BaseActivity {
         final Gson gson = ((FiveHundredPxApplication) getApplication()).getGson();
 
         Observable.just(CATEGORY_JSON_IN_ASSETS)
-                .map(new Func1<String, List<Category>>() {
-                    @Override
-                    public List<Category> call(String s) {
-                        String categoriesString = loadCategoriesJsonStringFromAssets(s);
-                        return gson.fromJson(categoriesString, new TypeToken<List<Category>>() {}.getType());
-                    }
-                })
+                .map(s -> AssetsUtils.loadJsonStringFromAssets(this, s))
+                .map(s -> (List<Category>) gson.fromJson(s, new TypeToken<List<Category>>() {}.getType()))
                 .filter(categories -> categories != null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(categories -> setupCategoriesRecyclerView(categories));
-    }
-
-    // Load selected categories from a local json file in assets
-    private String loadCategoriesJsonStringFromAssets(String filenameInAssets) {
-        String json = null;
-        try {
-            InputStream is = getAssets().open(filenameInAssets);
-            int size = is.available();
-            byte[] buffer = new byte[size];
-            is.read(buffer);
-            is.close();
-
-            json = new String(buffer, "UTF-8");
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return json;
-
+                .subscribe((categories -> setupCategoriesRecyclerView(categories)));
     }
 
     private void setupCategoriesRecyclerView(final List<Category> categories) {
