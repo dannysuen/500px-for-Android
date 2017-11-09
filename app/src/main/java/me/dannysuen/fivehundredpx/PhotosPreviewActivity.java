@@ -6,7 +6,6 @@ import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.Toast;
 
 import org.parceler.Parcels;
@@ -64,21 +63,9 @@ public class PhotosPreviewActivity extends BaseActivity {
         setupPhotosRecyclerView();
 
         // It needs to be put into MessageQueue in order to animate the control
-        mRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                mRefreshLayout.setRefreshing(true);
-            }
-        });
-
+        mRefreshLayout.post(() -> mRefreshLayout.setRefreshing(true));
         fetchPhotosList();
-
-        mRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                fetchPhotosList();
-            }
-        });
+        mRefreshLayout.setOnRefreshListener(() -> fetchPhotosList());
     }
 
     private void setupPhotosRecyclerView() {
@@ -96,19 +83,14 @@ public class PhotosPreviewActivity extends BaseActivity {
                 loadNextPage(mNextPage);
             }
         });
-        ItemClickSupport.addTo(mPhotosRecyclerView).setOnItemClickListener(
-                new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        List<Photo> photos = ((PhotosAdapter) recyclerView.getAdapter()).getPhotos();
-                        Photo photo = photos.get(position);
+        ItemClickSupport.addTo(mPhotosRecyclerView).setOnItemClickListener((recyclerView, position, v) -> {
+            List<Photo> photos = ((PhotosAdapter) recyclerView.getAdapter()).getPhotos();
+            Photo photo = photos.get(position);
 
-                        Intent intent = new Intent(PhotosPreviewActivity.this, PhotoActivity.class);
-                        intent.putExtra(Photo.class.getCanonicalName(), Parcels.wrap(photo));
-                        startActivity(intent);
-                    }
-                }
-        );
+            Intent intent = new Intent(PhotosPreviewActivity.this, PhotoActivity.class);
+            intent.putExtra(Photo.class.getCanonicalName(), Parcels.wrap(photo));
+            startActivity(intent);
+        });
     }
 
     @Override
