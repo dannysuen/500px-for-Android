@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.view.View;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -23,7 +22,6 @@ import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
 import me.dannysuen.fivehundredpx.util.recyclerview.ItemClickSupport;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
-import rx.functions.Action1;
 import rx.functions.Func1;
 import rx.schedulers.Schedulers;
 
@@ -49,20 +47,13 @@ public class MainActivity extends BaseActivity {
                     @Override
                     public List<Category> call(String s) {
                         String categoriesString = loadCategoriesJsonStringFromAssets(s);
-                        List<Category> categories = gson.fromJson(categoriesString, new TypeToken<List<Category>>() {}.getType());
-                        return categories;
+                        return gson.fromJson(categoriesString, new TypeToken<List<Category>>() {}.getType());
                     }
                 })
+                .filter(categories -> categories != null)
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(new Action1<List<Category>>() {
-                    @Override
-                    public void call(List<Category> categories) {
-                        if (categories != null) {
-                            setupCategoriesRecyclerView(categories);
-                        }
-                    }
-                });
+                .subscribe(categories -> setupCategoriesRecyclerView(categories));
     }
 
     // Load selected categories from a local json file in assets
@@ -89,18 +80,13 @@ public class MainActivity extends BaseActivity {
         categoriesRecyclerView.addItemDecoration(new DividerItemDecoration(this,
                 DividerItemDecoration.VERTICAL_LIST));
 
-        ItemClickSupport.addTo(categoriesRecyclerView).setOnItemClickListener(
-                new ItemClickSupport.OnItemClickListener() {
-                    @Override
-                    public void onItemClicked(RecyclerView recyclerView, int position, View v) {
-                        Category category = categories.get(position);
+        ItemClickSupport.addTo(categoriesRecyclerView).setOnItemClickListener((recyclerView, position, v) -> {
+                Category category = categories.get(position);
 
-                        Intent intent = new Intent(MainActivity.this, PhotosPreviewActivity.class);
-                        intent.putExtra(Category.class.getCanonicalName(), Parcels.wrap(category));
-                        startActivity(intent);
-                    }
-                }
-        );
+                Intent intent = new Intent(MainActivity.this, PhotosPreviewActivity.class);
+                intent.putExtra(Category.class.getCanonicalName(), Parcels.wrap(category));
+                startActivity(intent);
+        });
 
         categoriesAdapter = new CategoriesAdapter(this, categories);
         // Attach the adapter to the recyclerview to populate items
