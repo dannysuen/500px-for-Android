@@ -1,7 +1,9 @@
 package me.dannysuen.fivehundredpx;
 
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -19,7 +21,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import me.dannysuen.fivehundredpx.activity.BaseActivity;
 import me.dannysuen.fivehundredpx.model.Category;
-import me.dannysuen.fivehundredpx.util.recyclerview.DividerItemDecoration;
+import me.dannysuen.fivehundredpx.util.recyclerview.EnhancedDividerItemDecoration;
 import me.dannysuen.fivehundredpx.util.recyclerview.ItemClickSupport;
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
@@ -86,8 +88,12 @@ public class MainActivity extends BaseActivity {
     private void setupCategoriesRecyclerView(final List<Category> categories) {
         final LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         categoriesRecyclerView.setLayoutManager(linearLayoutManager);
-        categoriesRecyclerView.addItemDecoration(new DividerItemDecoration(this,
-                DividerItemDecoration.VERTICAL_LIST));
+
+        Drawable d = ContextCompat.getDrawable(this, R.drawable.horizontal_line_divider);
+        EnhancedDividerItemDecoration divider = new EnhancedDividerItemDecoration(this,
+                EnhancedDividerItemDecoration.VERTICAL_LIST);
+        divider.setDrawable(d);
+        categoriesRecyclerView.addItemDecoration(divider);
 
         ItemClickSupport.addTo(categoriesRecyclerView).setOnItemClickListener(
                 new ItemClickSupport.OnItemClickListener() {

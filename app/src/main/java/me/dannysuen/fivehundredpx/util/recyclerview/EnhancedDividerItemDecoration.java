@@ -1,8 +1,5 @@
 package me.dannysuen.fivehundredpx.util.recyclerview;
 
-/**
- * Created by danny on 16-7-26.
- */
 
 import android.content.Context;
 import android.content.res.TypedArray;
@@ -14,8 +11,8 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
 
-public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
+public class EnhancedDividerItemDecoration extends RecyclerView.ItemDecoration {
     public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
     public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
     private static final int[] ATTRS = new int[]{
@@ -25,11 +22,18 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
 
     private int mOrientation;
 
-    public DividerItemDecoration(Context context, int orientation) {
+    public EnhancedDividerItemDecoration(Context context, int orientation) {
         final TypedArray a = context.obtainStyledAttributes(ATTRS);
         mDivider = a.getDrawable(0);
         a.recycle();
         setOrientation(orientation);
+    }
+
+    public void setOrientation(int orientation) {
+        if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
+            throw new IllegalArgumentException("invalid orientation");
+        }
+        mOrientation = orientation;
     }
 
     /**
@@ -42,13 +46,6 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             throw new IllegalArgumentException("Drawable cannot be null.");
         }
         mDivider = drawable;
-    }
-
-    public void setOrientation(int orientation) {
-        if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
-            throw new IllegalArgumentException("invalid orientation");
-        }
-        mOrientation = orientation;
     }
 
     @Override
@@ -70,14 +67,16 @@ public class DividerItemDecoration extends RecyclerView.ItemDecoration {
             final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
                     .getLayoutParams();
 
+            // Draw divider above items
             final int top = child.getTop() - params.topMargin;
             final int bottom = top + mDivider.getIntrinsicHeight();
             mDivider.setBounds(left, top, right, bottom);
             mDivider.draw(c);
 
+            // Draw divider below the last item
             if (i == childCount - 1) {
                 final int top2 = child.getBottom() + params.bottomMargin;
-                final int bottom2 = top + mDivider.getIntrinsicHeight();
+                final int bottom2 = top2 + mDivider.getIntrinsicHeight();
                 mDivider.setBounds(left, top2, right, bottom2);
                 mDivider.draw(c);
             }
